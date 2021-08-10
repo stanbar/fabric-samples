@@ -235,7 +235,12 @@ function networkUp() {
     createOrgs
   fi
 
-  COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
+  if [ "$SIMULATION" = true ]; then
+    COMPOSE_FILES="-f ${COMPOSE_FILE_SIMULATION}"
+  else
+    COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
+  fi
+
 
   if [ "${DATABASE}" == "couchdb" ]; then
     COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
@@ -320,6 +325,8 @@ CC_COLL_CONFIG="NA"
 CC_INIT_FCN="NA"
 # use this as the default docker-compose yaml definition
 COMPOSE_FILE_BASE=docker/docker-compose-test-net.yaml
+# docker-compose.yml file if you are using simulation and store data in /mnt/fabric
+COMPOSE_FILE_SIMULATION=docker/docker-compose-test-net-simulation.yaml
 # docker-compose.yaml file if you are using couchdb
 COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
 # certificate authorities compose file
@@ -337,6 +344,8 @@ CC_VERSION="1.0"
 CC_SEQUENCE=1
 # default database
 DATABASE="leveldb"
+# simulation
+SIMULATION=false
 
 # Get docker sock path from environment variable
 SOCK="${DOCKER_HOST:-/var/run/docker.sock}"
@@ -421,6 +430,13 @@ while [[ $# -ge 1 ]] ; do
   -cci )
     CC_INIT_FCN="$2"
     shift
+    ;;
+  -sim )
+    SIMULATION=true
+    echo $SIMULATION
+    shift
+    echo "shifted"
+    echo "$1"
     ;;
   -verbose )
     VERBOSE=true
