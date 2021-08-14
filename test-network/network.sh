@@ -236,8 +236,10 @@ function networkUp() {
   fi
 
   if [ "$SIMULATION" = true ]; then
+    echo "******** using simulation compose *********"
     COMPOSE_FILES="-f ${COMPOSE_FILE_SIMULATION}"
   else
+    echo "******** using normal compose *********"
     COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
   fi
 
@@ -433,10 +435,7 @@ while [[ $# -ge 1 ]] ; do
     ;;
   -sim )
     SIMULATION=true
-    echo $SIMULATION
     shift
-    echo "shifted"
-    echo "$1"
     ;;
   -verbose )
     VERBOSE=true
