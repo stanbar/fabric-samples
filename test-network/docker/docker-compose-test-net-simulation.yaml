@@ -66,6 +66,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - CORE_LEDGER_STATE_TOTALQUERYLIMIT=604800
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
       #Generic peer variables
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric_test
@@ -90,7 +92,7 @@ services:
         - ${DOCKER_SOCK}:/host/var/run/docker.sock
         - ../organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ../organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
-        - /mnt/fabric/peer0.org1.example.com:/var/hyperledger/production
+        - "/mnt/fabric/peer0.org1.example.com/:/var/hyperledger/production"
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     ports:
@@ -105,6 +107,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - CORE_LEDGER_STATE_TOTALQUERYLIMIT=6048000
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
       #Generic peer variables
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric_test
@@ -129,7 +133,7 @@ services:
         - ${DOCKER_SOCK}:/host/var/run/docker.sock
         - ../organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - ../organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
-        - /mnt/fabric/peer0.org2.example.com:/var/hyperledger/production
+        - "/mnt/fabric/peer0.org2.example.com/:/var/hyperledger/production"
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     ports:
@@ -146,6 +150,7 @@ services:
     tty: true
     stdin_open: true
     environment:
+      - CORE_LEDGER_STATE_TOTALQUERYLIMIT=1000000000
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=INFO
